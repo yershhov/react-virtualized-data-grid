@@ -43,9 +43,10 @@ In practice, the browser now only has to render roughly:
 
 instead of the full dataset.
 
-Important: this demo is focused on DOM virtualization. Please be aware that demo dataset is still
-generated in memory up front, so very large row and column counts will still
-increase startup cost.
+> [!IMPORTANT]
+> This demo is focused on **DOM virtualization**. The demo dataset is still
+> generated in memory up front, so very large row and column counts will still
+> increase startup cost.
 
 ## Project structure
 
