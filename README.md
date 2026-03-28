@@ -1,9 +1,8 @@
-# Virtualized Grid Tryout
+# Virtualized Table
 
-This project is a React + TypeScript playground for learning grid virtualization.
-It started as a deliberately naive data grid that tried to mount every row and
-every cell in the DOM. With large row and column counts, that approach quickly
-turns scrolling into a rendering bottleneck.
+This project showcases a performance optimization technique called "virtualization".
+It started as a deliberately naively huge table, that tried to render a ton of data at once. 
+Being too large, that approach quickly turns scrolling into a rendering bottleneck.
 
 ## Start here
 
@@ -11,10 +10,6 @@ If you are reading the code, jump straight to these two files first:
 
 - [`src/components/Grid.tsx`](src/components/Grid.tsx) contains the grid rendering path
 - [`src/hooks/useGridVirtualization.ts`](src/hooks/useGridVirtualization.ts) contains the viewport measurement, scroll tracking, and virtualization math
-
-The rest of the app is mostly presentation and demo scaffolding. In particular,
-[`src/components/GridPanel.tsx`](src/components/GridPanel.tsx) is just the
-surrounding panel chrome.
 
 ## The initial problem
 
@@ -30,19 +25,17 @@ That means the DOM pressure grows with the full dataset size:
 rowCount * columnCount
 ```
 
-Even if the viewport only shows a small slice of the table, the browser still
-has to manage the full rendered tree.
+Even if the viewport can only fit a small slice of the table at once, the browser still
+has to manage the full rendered table.
 
 ## What the current solution does
 
 The grid now virtualizes both axes:
 
-- vertical virtualization renders only the visible rows plus overscan
-- horizontal virtualization renders only the visible columns plus overscan
-- the scroll container keeps the full scrollable width and height
-- translated inner tracks place the rendered slice at the correct position
+- vertical virtualization renders only the visible rows plus overscan (5 below and 5 above the currently visible portion)
+- horizontal virtualization renders only the visible columns plus overscan (5 on both sides of the currently visible portion)
 
-In practice, the browser renders roughly:
+In practice, the browser now only has to render roughly:
 
 ```text
 (visibleRows + overscan buffer) * (visibleColumns + overscan buffer)
@@ -50,16 +43,16 @@ In practice, the browser renders roughly:
 
 instead of the full dataset.
 
-Important: this demo is focused on DOM virtualization. The dataset is still
-generated in memory up front, so very large row and column counts will also
-increase startup cost, not just render cost.
+Important: this demo is focused on DOM virtualization. Please be aware that demo dataset is still
+generated in memory up front, so very large row and column counts will still
+increase startup cost.
 
 ## Project structure
 
+- `src/gridData.ts` defines dataset size, cell sizing, and generated data
 - `src/components/GridPanel.tsx` holds the surrounding panel copy
 - `src/components/Grid.tsx` renders the grid DOM
 - `src/hooks/useGridVirtualization.ts` owns measurement, scroll tracking, and visible-range math
-- `src/gridData.ts` defines dataset size, cell sizing, and generated data
 
 ## Run locally
 
@@ -77,18 +70,6 @@ Start the dev server:
 npm run dev
 ```
 
-Build a production bundle:
-
-```bash
-npm run build
-```
-
-Lint the project:
-
-```bash
-npm run lint
-```
-
 ## Try different scenarios
 
 Edit the constants at the top of `src/gridData.ts`.
@@ -97,7 +78,7 @@ The current checked-in values are intentionally aggressive: `100_000` rows and
 `10_000` columns.
 
 Because the dataset is still generated eagerly in memory, a smaller first-run
-scenario like `10_000` rows and `30` to `100` columns is a safer place to
+scenario like `10_000` rows and `100` columns is a safer place to
 start when profiling locally.
 
 - `ROW_COUNT` changes the vertical pressure
