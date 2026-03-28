@@ -60,8 +60,8 @@ instead of the full dataset.
 Clone the repository and install dependencies:
 
 ```bash
-git clone <your-repo-url>
-cd virtualization_tryout
+git clone https://github.com/yershhov/react-virtualized-data-grid.git
+cd react-virtualized-data-grid
 npm install
 ```
 
