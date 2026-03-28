@@ -1,4 +1,4 @@
-# Virtualized Table
+# React Virtualization Showcase
 
 This project showcases a performance optimization technique called "virtualization".
 It started as a deliberately naively huge table, that tried to render a ton of data at once. 
